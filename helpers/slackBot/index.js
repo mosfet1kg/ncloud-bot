@@ -18,8 +18,11 @@ module.exports = {
   },
   postMessageToUser: ({ username, message }) => {
     return new Promise((resolve, reject) => {
-      bot.postMessageToUser('mosfet1kg', 'meow!', { 'slackbot': true, icon_emoji: ':cat:' }, ( data ) => {
-        console.log( data );
+      bot.postMessageToUser(username, message, { icon_emoji: ':cat:' }, ( data ) => {
+        if ( ! data.ok ) {
+          return reject(data);
+        }
+
         resolve( data );
       });
 
