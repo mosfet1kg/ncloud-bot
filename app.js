@@ -1,38 +1,24 @@
-const SlackBot = require('slackbots');
+require('dotenv').config();
+const slackBot = require('./helpers/slackBot');
+const fetchClient = require('./helpers/ncloudApi/fetchClient');
 
-// create a bot
-const bot = new SlackBot({
-  token: 'xoxb-351721204902-5IwBGijZyLhStDBefwPIoosR', // Add a bot https://my.slack.com/services/new/bot and put the token
-  name: 'ncloud-bot'
-});
+(async () => {
+  // try {
+  //   await slackBot.connect();
+  //
+  //   await slackBot.postMessageToUser({ username: 'mosfet1kg', message: 'hello'});
+  //   await slackBot.postMessageToUser({ username: 'mosfet1kg', message: 'hello'});
+  //
+  //
+  // } catch(e) {
+  //   console.log( e );
+  // } // end try ~ catch
+})();
 
-bot.on('start', () => {
-  // more information about additional params https://api.slack.com/methods/chat.postMessage
-  const params = {
-    icon_emoji: ':cat:'
-  };
+fetchClient({
+  method: 'GET',
+  action: 'getZoneList',
+  basePath: '/server/v1/',
+}).then(response => console.log( response.data ))
+  .catch( error => console.log( error.response.data ));
 
-  // define channel, where bot exist. You can adjust it there https://my.slack.com/services
-  // bot.postMessageToChannel('general', 'meow!', params);
-
-  // define existing username instead of 'user_name'
-  // bot.postMessageToUser('gbchoi', 'meow!', params, (data) => {
-  //   console.log( data );
-  // });
-
-  // If you add a 'slackbot' property,
-  // you will post to another user's slackbot channel instead of a direct message
-  bot.postMessageToUser('mosfet1kg', 'meow!', { 'slackbot': true, icon_emoji: ':cat:' /**, username: 'gbchoi' **/ }, ( data ) => {
-    console.log( data );
-  });
-
-  // define private group instead of 'private_group', where bot exist
-  // bot.postMessageToGroup('private_group', 'meow!', params);
-});
-
-// bot.on('message', (data) => {
-//   // all ingoing events https://api.slack.com/rtm
-//   console.log(data);
-// });
-
-// bot.getUsers().then(res => console.log( res ))
